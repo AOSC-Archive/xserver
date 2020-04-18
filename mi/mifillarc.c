@@ -50,7 +50,7 @@ Author:  Bob Scheifler, MIT X Consortium
 #define Dsin(d)	sin((double)d*(M_PI/11520.0))
 #define Dcos(d)	cos((double)d*(M_PI/11520.0))
 
-static void
+void
 miFillArcSetup(xArc * arc, miFillArcRec * info)
 {
     info->y = arc->height >> 1;
@@ -276,7 +276,7 @@ miGetPieEdge(xArc * arc, int angle, miSliceEdgePtr edge, Bool top, Bool left)
     miGetArcEdge(arc, edge, k, top, left);
 }
 
-static void
+void
 miFillArcSliceSetup(xArc * arc, miArcSliceRec * slice, GCPtr pGC)
 {
     int angle1, angle2;

@@ -806,3 +806,17 @@ miXYToWindow(ScreenPtr pScreen, SpritePtr pSprite, int x, int y)
     pSprite->spriteTraceGood = 1;       /* root window still there */
     return miSpriteTrace(pSprite, x, y);
 }
+
+void
+miSegregateChildren(WindowPtr pWin, RegionPtr pReg, int depth)
+{
+    WindowPtr pChild;
+
+    for (pChild = pWin->firstChild; pChild; pChild = pChild->nextSib) {
+        if (pChild->drawable.depth == depth)
+            RegionUnion(pReg, pReg, &pChild->borderClip);
+
+        if (pChild->firstChild)
+            miSegregateChildren(pChild, pReg, depth);
+    }
+}

@@ -199,6 +199,13 @@ cat > sdksyms.c << EOF
 # include "dristruct.h"
 #endif
 
+/* hw/xfree86/xaa/Makefile.am -- module */
+/*
+#include "xaa.h"
+#include "xaalocal.h"
+#include "xaarop.h"
+ */
+
 
 /* mi/Makefile.am */
 #include "micmap.h"

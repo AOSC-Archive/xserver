@@ -91,3 +91,29 @@ typedef struct _LineFace {
 	ValidateGC (pDrawable, pGC); \
     } \
 }
+
+int miPolyBuildPoly(PolyVertexPtr vertices,
+                    PolySlopePtr slopes, int count, int xi,
+                    int yi, PolyEdgePtr left,
+                    PolyEdgePtr right, int *pnleft,
+                    int *pnright, int *h);
+
+int miPolyBuildEdge(double x0, double y0, double k, int dx,
+                    int dy, int xi, int yi, int left,
+                    PolyEdgePtr edge);
+
+void miRoundJoinClip(LineFacePtr /*pLeft */,
+                     LineFacePtr /*pRight */,
+                     PolyEdgePtr /*edge1 */,
+                     PolyEdgePtr /*edge2 */,
+                     int * /*y1 */,
+                     int * /*y2 */,
+                     Bool * /*left1 */,
+                     Bool * /*left2 */
+);
+
+int miRoundCapClip(LineFacePtr /*face */,
+                   Bool /*isInt */,
+                   PolyEdgePtr /*edge */,
+                   Bool * /*leftEdge */
+);

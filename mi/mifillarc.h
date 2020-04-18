@@ -175,4 +175,14 @@ typedef struct _miArcSlice {
 #define miFillInArcLower(slw) (((iny + dy) != 0) && \
 			       ((slw > 1) || (ine != inxk)))
 
+void miFillArcSetup(xArc * /*arc */,
+                    miFillArcRec * /*info */
+);
+
+void miFillArcSliceSetup(xArc * /*arc */,
+                         miArcSliceRec * /*slice */,
+                         GCPtr /*pGC */
+);
+
 #endif                          /* __MIFILLARC_H__ */
+
