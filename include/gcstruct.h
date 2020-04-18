@@ -254,6 +254,7 @@ typedef struct _GC {
     unsigned int arcMode:1;
     unsigned int subWindowMode:1;
     unsigned int graphicsExposures:1;
+    unsigned int clientClipType:2;      /* CT_<kind> */
     unsigned int miTranslate:1; /* should mi things translate? */
     unsigned int tileIsPixel:1; /* tile is solid pixel */
     unsigned int fExpose:1;     /* Call exposure handling */
@@ -275,8 +276,8 @@ typedef struct _GC {
     RegionPtr clientClip;
     unsigned int stateChanges; /* masked with GC_<kind> */
     unsigned int serialNumber;
-    const GCFuncs *funcs;
-    const GCOps *ops;
+    /*const*/ GCFuncs *funcs;
+    /*const*/ GCOps *ops;
     PrivateRec *devPrivates;
     RegionPtr pCompositeClip;
 } GC;
