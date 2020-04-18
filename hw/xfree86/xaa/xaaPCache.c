@@ -1159,20 +1159,27 @@ XAAInitPixmapCache(ScreenPtr pScreen, RegionPtr areas, void *data)
 }
 
 #if X_BYTE_ORDER == X_BIG_ENDIAN
-static CARD32 StippleMasks[4] = {
+static CARD32 StippleMasks[7] = {
     0x80808080,
     0xC0C0C0C0,
     0x00000000,
-    0xF0F0F0F0
+    0xF0F0F0F0,
+    0x00000000,
+    0x00000000,
+    0x00000000
 };
 #else
-static CARD32 StippleMasks[4] = {
+static CARD32 StippleMasks[7] = {
     0x01010101,
     0x03030303,
     0x00000000,
-    0x0F0F0F0F
+    0x0F0F0F0F,
+    0x00000000,
+    0x00000000,
+    0x00000000
 };
 #endif
+// AOSC CID-284824
 
 Bool
 XAACheckStippleReducibility(PixmapPtr pPixmap)
@@ -1702,6 +1709,7 @@ XAACacheMonoStipple(ScrnInfoPtr pScrn, PixmapPtr pPix)
     dwords = bytes_to_int32(pad);
     dstPtr = data = (unsigned char *) malloc(pad * pCache->h);
     srcPtr = (unsigned char *) pPix->devPrivate.ptr;
+    memset(data, 0, pad * pCache->h); // AOSC CID-284864
 
     if (infoRec->
         ScreenToScreenColorExpandFillFlags & BIT_ORDER_IN_BYTE_MSBFIRST)

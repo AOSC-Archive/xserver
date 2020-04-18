@@ -212,7 +212,7 @@ XAAValidatePolyGlyphBlt(GCPtr pGC, unsigned long changes, DrawablePtr pDraw)
         if (infoRec->PolyGlyphBltTE &&
             CHECK_PLANEMASK(pGC, infoRec->PolyGlyphBltTEFlags) &&
             CHECK_ROP(pGC, infoRec->PolyGlyphBltTEFlags) &&
-            CHECK_ROPSRC(pGC, infoRec->PolyGlyphBltNonTEFlags) &&
+            CHECK_ROPSRC(pGC, infoRec->PolyGlyphBltTEFlags) &&  // AOSC CID-284783
             CHECK_FG(pGC, infoRec->PolyGlyphBltTEFlags) &&
             (!(infoRec->PolyGlyphBltTEFlags & TRANSPARENCY_GXCOPY_ONLY) ||
              (pGC->alu == GXcopy))

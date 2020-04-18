@@ -146,8 +146,10 @@ XAAInitAccel(ScreenPtr pScreen, XAAInfoRecPtr infoRec)
     infoRec->NeedToSync = FALSE;
 
     /* must have a Sync function */
-    if (!infoRec->Sync)
+    if (!infoRec->Sync) {
+        free(options);  // AOSC CID-284843
         return FALSE;
+    }
     for (i = 0; i < pScrn->numEntities; i++) {
         if (xf86IsEntityShared(pScrn->entityList[i]))
             is_shared = 1;
@@ -156,12 +158,16 @@ XAAInitAccel(ScreenPtr pScreen, XAAInfoRecPtr infoRec)
     /* If this PCI entity has IS_SHARED_ACCEL set in entityProp
      * then a RestoreAccelState function is required
      */
-    if (!infoRec->RestoreAccelState && is_shared)
+    if (!infoRec->RestoreAccelState && is_shared) {
+        free(options);  // AOSC CID-284843
         return FALSE;
+    }
 
     if (infoRec->RestoreAccelState) {
-        if (!XAAInitStateWrap(pScreen, infoRec))
+        if (!XAAInitStateWrap(pScreen, infoRec)) {
+            free(options);  // AOSC CID-284843
             return FALSE;
+        }
     }
 
     if (serverGeneration == 1)
