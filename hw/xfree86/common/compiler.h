@@ -519,12 +519,73 @@ xf86WriteMmio32Le(__volatile__ void *base, const unsigned long offset,
 }
 
 #elif defined(__mips__) || (defined(__arm32__) && !defined(__linux__))
-#if defined(__arm32__) || defined(__mips64)
+#if defined(__arm32__) || (defined(__mips64) && !defined(_MIPS_TUNE_LOONGSON2F))
 #define PORT_SIZE long
 #else
 #define PORT_SIZE short
 #endif
 
+#ifdef _MIPS_TUNE_LOONGSON2F
+extern _X_EXPORT volatile unsigned char *ioBase;      /* Memory mapped I/O port area */
+
+#ifndef MAP_FAILED
+#define MAP_FAILED ((void *)-1)
+#endif
+
+static __inline__ void
+outb(unsigned PORT_SIZE port, unsigned char val)
+{
+    if (ioBase == MAP_FAILED)
+        return;
+    *(volatile unsigned char *) (((unsigned PORT_SIZE) (port)) + ioBase) =
+        val;
+}
+
+static __inline__ void
+outw(unsigned PORT_SIZE port, unsigned short val)
+{
+    if (ioBase == MAP_FAILED)
+        return;
+    *(volatile unsigned short *) (((unsigned PORT_SIZE) (port)) + ioBase) =
+        val;
+}
+
+static __inline__ void
+outl(unsigned PORT_SIZE port, unsigned int val)
+{
+    if (ioBase == MAP_FAILED)
+        return;
+    *(volatile unsigned int *) (((unsigned PORT_SIZE) (port)) + ioBase) =
+        val;
+}
+
+static __inline__ unsigned int
+inb(unsigned PORT_SIZE port)
+{
+    if (ioBase == MAP_FAILED)
+        return 0;
+    return *(volatile unsigned char *) (((unsigned PORT_SIZE) (port)) +
+                                        ioBase);
+}
+
+static __inline__ unsigned int
+inw(unsigned PORT_SIZE port)
+{
+    if (ioBase == MAP_FAILED)
+        return 0;
+    return *(volatile unsigned short *) (((unsigned PORT_SIZE) (port)) +
+                                         ioBase);
+}
+
+static __inline__ unsigned int
+inl(unsigned PORT_SIZE port)
+{
+    if (ioBase == MAP_FAILED)
+        return 0;
+    return *(volatile unsigned int *) (((unsigned PORT_SIZE) (port)) +
+                                       ioBase);
+}
+#else // !_MIPS_TUNE_LOONGSON2F
 _X_EXPORT unsigned int IOPortBase;      /* Memory mapped I/O port area */
 
 static __inline__ void
@@ -568,6 +629,7 @@ inl(unsigned PORT_SIZE port)
     return *(volatile unsigned int *) (((unsigned PORT_SIZE) (port)) +
                                        IOPortBase);
 }
+#endif
 
 #if defined(__mips__)
 #ifdef __linux__                    /* don't mess with other OSs */
